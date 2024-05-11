@@ -1,9 +1,6 @@
 #pragma once
 
-#include <iostream>
-#include <graphics.h>
-
-using namespace std;
+#include "header.h"
 
 class Board {
 	//初始为0，两个棋子为1和-1；
@@ -106,27 +103,28 @@ public:
 	}
 
 	void init_chess(int bk) {
-		initgraph(25 * l + 100, 25 * r, 1);
+		initgraph(25 * l + 100, 25 * r);
 		// setbkcolor(RGB(0, 178, 238));
 		// cleardevice();
-		
+		LPCTSTR bk_str = "res/星空.jpg";
 		switch (bk) {
-		case 1: loadimage(0, "res/哆啦A梦.jpg", 25 * l + 100, 25 * r);	break;
-		case 2: loadimage(0, "res/海贼王.jpg", 25 * l + 100, 25 * r);	break;
-		case 3: loadimage(0, "res/卡通熊猫.jpg", 25 * l + 100, 25 * r); 	break;
-		case 4: loadimage(0, "res/浪漫情人节.jpg", 25 * l + 100, 25 * r);	break;
-		case 5: loadimage(0, "res/落日.jpg", 25 * l + 100, 25 * r);		break;
-		case 6: loadimage(0, "res/鸣人佐助.jpg", 25 * l + 100, 25 * r);	break;
-		case 7: loadimage(0, "res/塞尔比.jpg", 25 * l + 100, 25 * r);	break;
-		case 8: loadimage(0, "res/赛博朋克.jpg", 25 * l + 100, 25 * r);	break;
-		case 9: loadimage(0, "res/沙滩.jpg", 25 * l + 100, 25 * r);		break;
-		case 10: loadimage(0, "res/山川河流.jpg", 25 * l + 100, 25 * r);	break;
-		case 11: loadimage(0, "res/小猫.jpg", 25 * l + 100, 25 * r);		break;
-		case 12: loadimage(0, "res/星空.jpg", 25 * l + 100, 25 * r);		break;
-		case 13: loadimage(0, "res/烟花.jpg", 25 * l + 100, 25 * r);		break;
-		case 14: loadimage(0, "res/宇宙星球.jpg", 25 * l + 100, 25 * r);	break;
-		case 15: loadimage(0, "res/蜘蛛侠.jpg", 25 * l + 100, 25 * r);	break;
+		case 1: bk_str = "res/哆啦A梦.jpg";	break;
+		case 2: bk_str = "res/海贼王.jpg";	break;
+		case 3: bk_str = "res/卡通熊猫.jpg"; 	break;
+		case 4: bk_str ="res/浪漫情人节.jpg";	break;
+		case 5: bk_str = "res/落日.jpg";		break;
+		case 6: bk_str = "res/鸣人佐助.jpg";	break;
+		case 7: bk_str = "res/塞尔比.jpg";	break;
+		case 8: bk_str = "res/赛博朋克.jpg";	break;
+		case 9: bk_str = "res/沙滩.jpg";		break;
+		case 10: bk_str ="res/山川河流.jpg";	break;
+		case 11: bk_str ="res/小猫.jpg";		break;
+		case 12: bk_str ="res/星空.jpg";		break;
+		case 13: bk_str ="res/烟花.jpg";		break;
+		case 14: bk_str ="res/宇宙星球.jpg";	break;
+		case 15: bk_str ="res/蜘蛛侠.jpg";	break;
 		}
+		loadimage(0, bk_str, 25 * l + 100, 25 * r);	
 		
 		// IMAGE img;
 		// loadimage(&img, "res/Black.bmp");
@@ -139,7 +137,8 @@ public:
 		for (int i = 0; i < 25 * l; i += 25) {
 			line(i, 0, i, 25 * (r - 1));
 		}
-
+		
+		setbkmode(OPAQUE);
 		TCHAR s1[] = _T("玩家1：黑棋");
 		TCHAR s2[] = _T("玩家2：白棋");
 		outtextxy(25 * l + 10, 6 * r, s1);
@@ -153,17 +152,22 @@ public:
 		int flag = 0;
 
 		while (1) {
+			BEGIN:
 			m = GetMouseMsg();
 
 			for (int i = 0; i < l; i++) {
 				for (int j = 0; j < r; j++) {
-					if (abs(m.x - i * 25) < 12 && abs(m.y - j * 25) < 12) {
+					if (abs(m.x - i * 25) <= 12 && abs(m.y - j * 25) <= 12) {
 						b = i;
 						a = j;
+						goto NEXT;
 					}
 				}
 			}
 
+			goto BEGIN;
+
+			NEXT:
 			if (m.uMsg == WM_LBUTTONDOWN) {
 				if (bod[a][b] != 0) {
 					TCHAR str1[] = _T("这里已经有棋子了，请重新选择");
@@ -172,11 +176,14 @@ public:
 					continue;
 				}
 				if (flag % 2 == 0) {
+					setcolor(WHITE);
 					setfillcolor(BLACK);
 					solidcircle(b * 25, a * 25, 10);
+					
 					bod[a][b] = 1;
 				}
 				else {
+					setcolor(BLACK);
 					setfillcolor(WHITE);
 					solidcircle(b * 25, a * 25, 10);
 					bod[a][b] = -1;

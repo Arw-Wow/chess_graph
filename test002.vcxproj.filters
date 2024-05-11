@@ -21,9 +21,18 @@
     <ClCompile Include="AI.h">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="fuc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BOARD.h">
+    <ClInclude Include="Board.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="header.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

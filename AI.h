@@ -1,5 +1,6 @@
-#include "BOARD.h"
-#include <Windows.h>
+#pragma once
+
+#include "header.h"
 
 class Pis {
 public:
@@ -224,16 +225,20 @@ public:
 		clear_map();
 		Pis pis = find_pis_down();
 
-		Sleep(1500);
+		Sleep(1100);
 
+		setlinecolor(BLACK);
 		setfillcolor(WHITE);
 		solidcircle(pis.y * 25, pis.x * 25, 10);
+		circle(pis.y * 25, pis.x * 25, 10);
 
 		Bod(pis.x, pis.y, -1);//默认AI为白棋-1
 	}
 
 	bool PlayerGo() {
 		MOUSEMSG m;
+		
+		BEGIN:
 		m = GetMouseMsg();
 		int a = 0, b = 0;
 
@@ -242,10 +247,13 @@ public:
 				if (abs(m.x - i * 25) < 12 && abs(m.y - j * 25) < 12) {
 					b = i;
 					a = j;
+					goto NEXT;
 				}
 			}
 		}
+		goto BEGIN;
 
+		NEXT:
 		if (m.uMsg == WM_LBUTTONDOWN) {
 			if (Bod(a, b) != 0) {
 				TCHAR str1[] = _T("这里已经有棋子了，请重新选择");
@@ -253,8 +261,10 @@ public:
 				MessageBox(NULL, str1, str2, MB_OK);
 				return false;
 			}
+			setlinecolor(WHITE);
 			setfillcolor(BLACK);
 			solidcircle(b * 25, a * 25, 10);
+			circle(b * 25, a * 25, 10);
 			Bod(a, b, 1);
 		}
 		else
@@ -263,7 +273,7 @@ public:
 		return true;
 	}
 
-	void Play_chess() {
+	void play_chess() {
 		while (1) {
 			while (!PlayerGo()) {}
 			if (this->judge(1))
